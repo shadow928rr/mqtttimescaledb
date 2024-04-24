@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guo.mqtttimescaledb.mapper.ContainerinfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.guo.mqtttimescaledb.eneity.Containerinfo">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="facility" column="facility" jdbcType="VARCHAR"/>
+            <result property="position" column="position" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,facility,position
+    </sql>
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guo.mqtttimescaledb.mapper.ControlorigindataMapper">
+
+    <resultMap id="BaseResultMap" type="com.guo.mqtttimescaledb.eneity.Controlorigindata">
+        <result property="current" column="current" jdbcType="REAL"/>
+        <result property="voltage" column="voltage" jdbcType="INTEGER"/>
+        <result property="loopid" column="loopid" jdbcType="INTEGER"/>
+        <result property="collecttime" column="collecttime" jdbcType="TIMESTAMP"/>
+        <result property="num" column="num" jdbcType="INTEGER"/>
+        <result property="power" column="power" jdbcType="REAL"/>
+        <result property="groupname" column="groupname" jdbcType="VARCHAR"/>
+        <result property="calculateerror" column="calculateerror" jdbcType="REAL"/>
+        <result property="calculatecurrent" column="calculatecurrent" jdbcType="REAL"/>
+        <result property="calculatetemperature" column="calculatetemperature" jdbcType="REAL"/>
+        <result property="integralvalue" column="integralvalue" jdbcType="REAL"/>
+        <result property="derivativevalue" column="derivativevalue" jdbcType="REAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        current,voltage,loopid,
+        collecttime,num,power,
+        groupname,calculateerror,calculatecurrent,
+        calculatetemperature,integralvalue,derivativevalue
+    </sql>
+    <update id="createSequence">
+        -- 创建序列
+        CREATE SEQUENCE "${schemaName}"."${sequenceName}"
+            INCREMENT 1
+            MINVALUE 1
+            MAXVALUE 9223372036854775807
+            START 1
+            CACHE 1;
+        SELECT setval('"${schemaName}"."${sequenceName}"', 1, false);
+        ALTER SEQUENCE "${schemaName}"."${sequenceName}" OWNER TO "postgres";
+    </update>
+
+    <select id="selectFlagNum" resultType="string">
+        select nextval('${schemaName}.${sequenceName}')
+    </select>
+
+    <insert id="insertTable">
+        insert into ${schemaName}.measureorigindata
+        (current,voltage,loopid,collecttime,num,power,groupname,calculateerror,calculatecurrent,calculatetemperature,integralvalue,derivativevalue)
+        values
+        <foreach collection="controlorigindataList" item="item" index="index" separator=",">
+            (#{item.current}, #{item.voltage}, #{item.loopid}, #{item.collecttime}, #{item.num}, #{item.power},
+            #{item.groupname}, #{item.calculateerror}, #{item.calculatecurrent}, #{item.calculatetemperature},
+            #{item.integralvalue}, #{item.derivativevalue})
+        </foreach>
+    </insert>
+</mapper>

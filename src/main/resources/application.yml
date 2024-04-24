@@ -1,0 +1,38 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: provider
+  mqtt:
+    url: tcp://192.168.95.142:1883
+    #    url: tcp://10.70.95.50:31883
+    #    url: tcp://192.168.95.142:1883
+    #    url: tcp://3.6.0.145:1883
+    username: client
+    password: s5115@km6
+    client:
+      id: mqtt-client
+    default:
+      topic: kmexp/#
+      #      topic: kmexp/#
+      #      topic: testtopic
+  datasource:
+    url: jdbc:postgresql://192.168.95.142:5432/thermaltest
+#    url: jdbc:postgresql://3.6.0.145:5432/thermaltest
+    #    url: jdbc:postgresql://192.168.95.142:5432/postgres
+    #    url: jdbc:postgresql://192.168.95.142:5432/thermaltest
+    #    url: jdbc:postgresql://10.70.95.50:32432/postgres
+    #    url: jdbc:postgresql://10.70.95.50:32432/thermaltest
+    #    username: postgres
+    username: postgres
+    #    password: 123456
+    #    password: 111111
+    password: 123456
+
+    #    username: client
+    #    password: s5115@km6
+    #    client:
+    #      id: mqttx_7c476d14
+    #    default:
+    #      topic: kmexp/#
+    #      topic: testtopic

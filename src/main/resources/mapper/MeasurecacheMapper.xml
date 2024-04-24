@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guo.mqtttimescaledb.mapper.MeasurecacheMapper">
+
+    <resultMap id="BaseResultMap" type="com.guo.mqtttimescaledb.eneity.Measurecache">
+        <result property="pointlabel" column="pointlabel" jdbcType="OTHER"/>
+        <result property="maxtime4" column="maxtime4" jdbcType="TIMESTAMP"/>
+        <result property="maxdata4" column="maxdata4" jdbcType="REAL"/>
+        <result property="minitime4" column="minitime4" jdbcType="TIMESTAMP"/>
+        <result property="minidata4" column="minidata4" jdbcType="REAL"/>
+        <result property="maxtime8" column="maxtime8" jdbcType="TIMESTAMP"/>
+        <result property="maxdata8" column="maxdata8" jdbcType="REAL"/>
+        <result property="minitime8" column="minitime8" jdbcType="TIMESTAMP"/>
+        <result property="minidata8" column="minidata8" jdbcType="REAL"/>
+        <result property="maxtime16" column="maxtime16" jdbcType="TIMESTAMP"/>
+        <result property="maxdata16" column="maxdata16" jdbcType="REAL"/>
+        <result property="minitime16" column="minitime16" jdbcType="TIMESTAMP"/>
+        <result property="minidata16" column="minidata16" jdbcType="REAL"/>
+        <result property="maxtime32" column="maxtime32" jdbcType="TIMESTAMP"/>
+        <result property="maxdata32" column="maxdata32" jdbcType="REAL"/>
+        <result property="minitime32" column="minitime32" jdbcType="TIMESTAMP"/>
+        <result property="minidata32" column="minidata32" jdbcType="REAL"/>
+        <result property="maxtime64" column="maxtime64" jdbcType="TIMESTAMP"/>
+        <result property="maxdata64" column="maxdata64" jdbcType="REAL"/>
+        <result property="minitime64" column="minitime64" jdbcType="TIMESTAMP"/>
+        <result property="minidata64" column="minidata64" jdbcType="REAL"/>
+        <result property="maxtime128" column="maxtime128" jdbcType="TIMESTAMP"/>
+        <result property="maxdata128" column="maxdata128" jdbcType="REAL"/>
+        <result property="minitime128" column="minitime128" jdbcType="TIMESTAMP"/>
+        <result property="minidata128" column="minidata128" jdbcType="REAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        pointlabel
+        ,maxtime4,maxdata4,
+        minitime4,minidata4,maxtime8,
+        maxdata8,minitime8,minidata8,
+        maxtime16,maxdata16,minitime16,
+        minidata16,maxtime32,maxdata32,
+        minitime32,minidata32,maxtime64,
+        maxdata64,minitime64,minidata64,
+        maxtime128,maxdata128,minitime128,
+        minidata128
+    </sql>
+    <insert id="insertTable">
+        insert into ${schemaName}.measurecache (pointlabel)
+        values
+        <foreach collection="measurecacheList" item="item" index="index" separator=",">
+            (#{item.pointlabel})
+        </foreach>
+    </insert>
+
+    <delete id="deleteAllMeasurecache">
+        delete
+        from ${schemaName}.measurecache;
+    </delete>
+</mapper>

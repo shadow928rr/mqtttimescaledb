@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guo.mqtttimescaledb.mapper.TestinfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.guo.mqtttimescaledb.eneity.Testinfo">
+        <result property="testname" column="testname" jdbcType="VARCHAR"/>
+        <result property="schemaname" column="schemaname" jdbcType="VARCHAR"/>
+        <result property="tablename" column="tablename" jdbcType="VARCHAR"/>
+        <result property="tablename4" column="tablename4" jdbcType="VARCHAR"/>
+        <result property="tablename8" column="tablename8" jdbcType="VARCHAR"/>
+        <result property="tablename16" column="tablename16" jdbcType="VARCHAR"/>
+        <result property="tablename32" column="tablename32" jdbcType="VARCHAR"/>
+        <result property="tablename64" column="tablename64" jdbcType="VARCHAR"/>
+        <result property="tablename128" column="tablename128" jdbcType="VARCHAR"/>
+        <result property="topic" column="topic" jdbcType="VARCHAR"/>
+        <result property="client" column="client" jdbcType="VARCHAR"/>
+        <!--        <result property="id" column="id" jdbcType="OTHER"/>-->
+        <result property="position" column="position" jdbcType="VARCHAR"/>
+        <result property="facility" column="facility" jdbcType="VARCHAR"/>
+        <result property="begintime" column="begintime" jdbcType="DATE"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        testname
+        ,schemaname,tablename,
+        tablename4,tablename8,tablename16,
+        tablename32,tablename64,id,
+        tablename128,topic,client,position,facility,begintime
+    </sql>
+
+</mapper>

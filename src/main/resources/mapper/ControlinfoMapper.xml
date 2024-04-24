@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guo.mqtttimescaledb.mapper.ControlinfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.guo.mqtttimescaledb.eneity.Controlinfo">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="testname" column="testname" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,createtime,content,
+        name,testname
+    </sql>
+    <!--    动态查询-->
+    <select id="selectControlinfo" resultType="com.guo.mqtttimescaledb.eneity.Controlinfo">
+        select createtime, content, name, testname
+        from ${schemaname}.controlinfo
+        where name = #{name}
+    </select>
+    <!--    动态插入-->
+    <insert id="insertControlInfoTable">
+        insert into ${schemaname}.controlinfo (createtime, content, name, testname)
+        values (#{controlinfo.createtime}, #{controlinfo.content}, #{controlinfo.name}, #{controlinfo.testname})
+    </insert>
+    <insert id="updateControlInfoTable">
+        Update ${schemaname}.controlinfo set createtime=#{controlinfo.createtime},content=#{controlinfo.content}
+        where name=#{controlinfo.name}
+    </insert>
+</mapper>

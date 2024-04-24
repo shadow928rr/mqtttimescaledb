@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guo.mqtttimescaledb.mapper.ControlcacheMapper">
+
+    <resultMap id="BaseResultMap" type="com.guo.mqtttimescaledb.eneity.Controlcache">
+        <id property="loopid" column="loopid" jdbcType="INTEGER"/>
+        <id property="groupname" column="groupname" jdbcType="VARCHAR"/>
+        <result property="maxcollecttime4" column="maxcollecttime4" jdbcType="TIMESTAMP"/>
+        <result property="swaptime4" column="swaptime4" jdbcType="TIMESTAMP"/>
+        <result property="mincollecttime4" column="mincollecttime4" jdbcType="TIMESTAMP"/>
+        <result property="maxcurrent4" column="maxcurrent4" jdbcType="REAL"/>
+        <result property="mincurrent4" column="mincurrent4" jdbcType="REAL"/>
+        <result property="maxvoltage4" column="maxvoltage4" jdbcType="REAL"/>
+        <result property="minvoltage4" column="minvoltage4" jdbcType="REAL"/>
+        <result property="maxpower4" column="maxpower4" jdbcType="REAL"/>
+        <result property="minpower4" column="minpower4" jdbcType="REAL"/>
+        <result property="maxcalculateerror4" column="maxcalculateerror4" jdbcType="REAL"/>
+        <result property="mincalculateerror4" column="mincalculateerror4" jdbcType="REAL"/>
+        <result property="maxcalculatecurrent4" column="maxcalculatecurrent4" jdbcType="REAL"/>
+        <result property="mincalculatecurrent4" column="mincalculatecurrent4" jdbcType="REAL"/>
+        <result property="maxcalculatetemperature4" column="maxcalculatetemperature4" jdbcType="REAL"/>
+        <result property="mincalculatetemperature4" column="mincalculatetemperature4" jdbcType="REAL"/>
+        <result property="maxintegralvalue4" column="maxintegralvalue4" jdbcType="REAL"/>
+        <result property="minintegralvalue4" column="minintegralvalue4" jdbcType="REAL"/>
+        <result property="maxderivativevalue4" column="maxderivativevalue4" jdbcType="REAL"/>
+        <result property="minderivativevalue4" column="minderivativevalue4" jdbcType="REAL"/>
+        <result property="maxcollecttime8" column="maxcollecttime8" jdbcType="TIMESTAMP"/>
+        <result property="swaptime8" column="swaptime8" jdbcType="TIMESTAMP"/>
+        <result property="mincollecttime8" column="mincollecttime8" jdbcType="TIMESTAMP"/>
+        <result property="maxcurrent8" column="maxcurrent8" jdbcType="REAL"/>
+        <result property="mincurrent8" column="mincurrent8" jdbcType="REAL"/>
+        <result property="maxvoltage8" column="maxvoltage8" jdbcType="REAL"/>
+        <result property="minvoltage8" column="minvoltage8" jdbcType="REAL"/>
+        <result property="maxpower8" column="maxpower8" jdbcType="REAL"/>
+        <result property="minpower8" column="minpower8" jdbcType="REAL"/>
+        <result property="maxcalculateerror8" column="maxcalculateerror8" jdbcType="REAL"/>
+        <result property="mincalculateerror8" column="mincalculateerror8" jdbcType="REAL"/>
+        <result property="maxcalculatecurrent8" column="maxcalculatecurrent8" jdbcType="REAL"/>
+        <result property="mincalculatecurrent8" column="mincalculatecurrent8" jdbcType="REAL"/>
+        <result property="maxcalculatetemperature8" column="maxcalculatetemperature8" jdbcType="REAL"/>
+        <result property="mincalculatetemperature8" column="mincalculatetemperature8" jdbcType="REAL"/>
+        <result property="maxintegralvalue8" column="maxintegralvalue8" jdbcType="REAL"/>
+        <result property="minintegralvalue8" column="minintegralvalue8" jdbcType="REAL"/>
+        <result property="maxderivativevalue8" column="maxderivativevalue8" jdbcType="REAL"/>
+        <result property="minderivativevalue8" column="minderivativevalue8" jdbcType="REAL"/>
+        <result property="maxcollecttime16" column="maxcollecttime16" jdbcType="TIMESTAMP"/>
+        <result property="swaptime16" column="swaptime16" jdbcType="TIMESTAMP"/>
+        <result property="mincollecttime16" column="mincollecttime16" jdbcType="TIMESTAMP"/>
+        <result property="maxcurrent16" column="maxcurrent16" jdbcType="REAL"/>
+        <result property="mincurrent16" column="mincurrent16" jdbcType="REAL"/>
+        <result property="maxvoltage16" column="maxvoltage16" jdbcType="REAL"/>
+        <result property="minvoltage16" column="minvoltage16" jdbcType="REAL"/>
+        <result property="maxpower16" column="maxpower16" jdbcType="REAL"/>
+        <result property="minpower16" column="minpower16" jdbcType="REAL"/>
+        <result property="maxcalculateerror16" column="maxcalculateerror16" jdbcType="REAL"/>
+        <result property="mincalculateerror16" column="mincalculateerror16" jdbcType="REAL"/>
+        <result property="maxcalculatecurrent16" column="maxcalculatecurrent16" jdbcType="REAL"/>
+        <result property="mincalculatecurrent16" column="mincalculatecurrent16" jdbcType="REAL"/>
+        <result property="maxcalculatetemperature16" column="maxcalculatetemperature16" jdbcType="REAL"/>
+        <result property="mincalculatetemperature16" column="mincalculatetemperature16" jdbcType="REAL"/>
+        <result property="maxintegralvalue16" column="maxintegralvalue16" jdbcType="REAL"/>
+        <result property="minintegralvalue16" column="minintegralvalue16" jdbcType="REAL"/>
+        <result property="maxderivativevalue16" column="maxderivativevalue16" jdbcType="REAL"/>
+        <result property="minderivativevalue16" column="minderivativevalue16" jdbcType="REAL"/>
+        <result property="maxcollecttime32" column="maxcollecttime32" jdbcType="TIMESTAMP"/>
+        <result property="swaptime32" column="swaptime32" jdbcType="TIMESTAMP"/>
+        <result property="mincollecttime32" column="mincollecttime32" jdbcType="TIMESTAMP"/>
+        <result property="maxcurrent32" column="maxcurrent32" jdbcType="REAL"/>
+        <result property="mincurrent32" column="mincurrent32" jdbcType="REAL"/>
+        <result property="maxvoltage32" column="maxvoltage32" jdbcType="REAL"/>
+        <result property="minvoltage32" column="minvoltage32" jdbcType="REAL"/>
+        <result property="maxpower32" column="maxpower32" jdbcType="REAL"/>
+        <result property="minpower32" column="minpower32" jdbcType="REAL"/>
+        <result property="maxcalculateerror32" column="maxcalculateerror32" jdbcType="REAL"/>
+        <result property="mincalculateerror32" column="mincalculateerror32" jdbcType="REAL"/>
+        <result property="maxcalculatecurrent32" column="maxcalculatecurrent32" jdbcType="REAL"/>
+        <result property="mincalculatecurrent32" column="mincalculatecurrent32" jdbcType="REAL"/>
+        <result property="maxcalculatetemperature32" column="maxcalculatetemperature32" jdbcType="REAL"/>
+        <result property="mincalculatetemperature32" column="mincalculatetemperature32" jdbcType="REAL"/>
+        <result property="maxintegralvalue32" column="maxintegralvalue32" jdbcType="REAL"/>
+        <result property="minintegralvalue32" column="minintegralvalue32" jdbcType="REAL"/>
+        <result property="maxderivativevalue32" column="maxderivativevalue32" jdbcType="REAL"/>
+        <result property="minderivativevalue32" column="minderivativevalue32" jdbcType="REAL"/>
+        <result property="maxcollecttime64" column="maxcollecttime64" jdbcType="TIMESTAMP"/>
+        <result property="swaptime64" column="swaptime64" jdbcType="TIMESTAMP"/>
+        <result property="mincollecttime64" column="mincollecttime64" jdbcType="TIMESTAMP"/>
+        <result property="maxcurrent64" column="maxcurrent64" jdbcType="REAL"/>
+        <result property="mincurrent64" column="mincurrent64" jdbcType="REAL"/>
+        <result property="maxvoltage64" column="maxvoltage64" jdbcType="REAL"/>
+        <result property="minvoltage64" column="minvoltage64" jdbcType="REAL"/>
+        <result property="maxpower64" column="maxpower64" jdbcType="REAL"/>
+        <result property="minpower64" column="minpower64" jdbcType="REAL"/>
+        <result property="maxcalculateerror64" column="maxcalculateerror64" jdbcType="REAL"/>
+        <result property="mincalculateerror64" column="mincalculateerror64" jdbcType="REAL"/>
+        <result property="maxcalculatecurrent64" column="maxcalculatecurrent64" jdbcType="REAL"/>
+        <result property="mincalculatecurrent64" column="mincalculatecurrent64" jdbcType="REAL"/>
+        <result property="maxcalculatetemperature64" column="maxcalculatetemperature64" jdbcType="REAL"/>
+        <result property="mincalculatetemperature64" column="mincalculatetemperature64" jdbcType="REAL"/>
+        <result property="maxintegralvalue64" column="maxintegralvalue64" jdbcType="REAL"/>
+        <result property="minintegralvalue64" column="minintegralvalue64" jdbcType="REAL"/>
+        <result property="maxderivativevalue64" column="maxderivativevalue64" jdbcType="REAL"/>
+        <result property="minderivativevalue64" column="minderivativevalue64" jdbcType="REAL"/>
+        <result property="maxcollecttime128" column="maxcollecttime128" jdbcType="TIMESTAMP"/>
+        <result property="swaptime128" column="swaptime128" jdbcType="TIMESTAMP"/>
+        <result property="mincollecttime128" column="mincollecttime128" jdbcType="TIMESTAMP"/>
+        <result property="maxcurrent128" column="maxcurrent128" jdbcType="REAL"/>
+        <result property="mincurrent128" column="mincurrent128" jdbcType="REAL"/>
+        <result property="maxvoltage128" column="maxvoltage128" jdbcType="REAL"/>
+        <result property="minvoltage128" column="minvoltage128" jdbcType="REAL"/>
+        <result property="maxpower128" column="maxpower128" jdbcType="REAL"/>
+        <result property="minpower128" column="minpower128" jdbcType="REAL"/>
+        <result property="maxcalculateerror128" column="maxcalculateerror128" jdbcType="REAL"/>
+        <result property="mincalculateerror128" column="mincalculateerror128" jdbcType="REAL"/>
+        <result property="maxcalculatecurrent128" column="maxcalculatecurrent128" jdbcType="REAL"/>
+        <result property="mincalculatecurrent128" column="mincalculatecurrent128" jdbcType="REAL"/>
+        <result property="maxcalculatetemperature128" column="maxcalculatetemperature128" jdbcType="REAL"/>
+        <result property="mincalculatetemperature128" column="mincalculatetemperature128" jdbcType="REAL"/>
+        <result property="maxintegralvalue128" column="maxintegralvalue128" jdbcType="REAL"/>
+        <result property="minintegralvalue128" column="minintegralvalue128" jdbcType="REAL"/>
+        <result property="maxderivativevalue128" column="maxderivativevalue128" jdbcType="REAL"/>
+        <result property="minderivativevalue128" column="minderivativevalue128" jdbcType="REAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        loopid
+        ,groupname,maxcollecttime4,
+        swaptime4,mincollecttime4,maxcurrent4,
+        mincurrent4,maxvoltage4,minvoltage4,
+        maxpower4,minpower4,maxcalculateerror4,
+        mincalculateerror4,maxcalculatecurrent4,mincalculatecurrent4,
+        maxcalculatetemperature4,mincalculatetemperature4,maxintegralvalue4,
+        minintegralvalue4,maxderivativevalue4,minderivativevalue4,
+        maxcollecttime8,swaptime8,mincollecttime8,
+        maxcurrent8,mincurrent8,maxvoltage8,
+        minvoltage8,maxpower8,minpower8,
+        maxcalculateerror8,mincalculateerror8,maxcalculatecurrent8,
+        mincalculatecurrent8,maxcalculatetemperature8,mincalculatetemperature8,
+        maxintegralvalue8,minintegralvalue8,maxderivativevalue8,
+        minderivativevalue8,maxcollecttime16,swaptime16,
+        mincollecttime16,maxcurrent16,mincurrent16,
+        maxvoltage16,minvoltage16,maxpower16,
+        minpower16,maxcalculateerror16,mincalculateerror16,
+        maxcalculatecurrent16,mincalculatecurrent16,maxcalculatetemperature16,
+        mincalculatetemperature16,maxintegralvalue16,minintegralvalue16,
+        maxderivativevalue16,minderivativevalue16,maxcollecttime32,
+        swaptime32,mincollecttime32,maxcurrent32,
+        mincurrent32,maxvoltage32,minvoltage32,
+        maxpower32,minpower32,maxcalculateerror32,
+        mincalculateerror32,maxcalculatecurrent32,mincalculatecurrent32,
+        maxcalculatetemperature32,mincalculatetemperature32,maxintegralvalue32,
+        minintegralvalue32,maxderivativevalue32,minderivativevalue32,
+        maxcollecttime64,swaptime64,mincollecttime64,
+        maxcurrent64,mincurrent64,maxvoltage64,
+        minvoltage64,maxpower64,minpower64,
+        maxcalculateerror64,mincalculateerror64,maxcalculatecurrent64,
+        mincalculatecurrent64,maxcalculatetemperature64,mincalculatetemperature64,
+        maxintegralvalue64,minintegralvalue64,maxderivativevalue64,
+        minderivativevalue64,maxcollecttime128,swaptime128,
+        mincollecttime128,maxcurrent128,mincurrent128,
+        maxvoltage128,minvoltage128,maxpower128,
+        minpower128,maxcalculateerror128,mincalculateerror128,
+        maxcalculatecurrent128,mincalculatecurrent128,maxcalculatetemperature128,
+        mincalculatetemperature128,maxintegralvalue128,minintegralvalue128,
+        maxderivativevalue128,minderivativevalue128
+    </sql>
+    <insert id="insertTable">
+        insert into ${schemaName}.controlcache (pointlabel,groupname)
+        values
+        <foreach collection="controlcacheList" item="item" index="index" separator=",">
+            (#{item.loopid},#{item.groupname})
+        </foreach>
+    </insert>
+
+    <delete id="deleteAllControlcache">
+        delete
+        from ${schemaName}.controlcache;
+--         where groupname='';
+    </delete>
+</mapper>

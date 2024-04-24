@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guo.mqtttimescaledb.mapper.MeasureinfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.guo.mqtttimescaledb.eneity.Measureinfo">
+        <id property="pointlabel" column="pointlabel" jdbcType="OTHER"/>
+        <result property="pointcode" column="pointcode" jdbcType="VARCHAR"/>
+        <result property="pointdescription" column="pointdescription" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        pointlabel
+        ,pointcode,pointdescription
+    </sql>
+
+    <insert id="insertMeasureInfoTable">
+        insert into ${tableName}.measureinfo (pointlabel, pointcode,pointdescription)
+        values
+        <foreach collection="measureinfoList" item="item" index="index" separator=",">
+            (#{item.pointlabel}, #{item.pointcode}, #{item.pointdescription})
+        </foreach>
+    </insert>
+    <delete id="deleteAllMeasureinfo">
+        delete
+        from ${tableName}.measureinfo;
+    </delete>
+
+    <resultMap id="MeasureinfoResult" type="com.guo.mqtttimescaledb.eneity.Measureinfo">
+        <result property="pointlabel" column="pointlabel" jdbcType="VARCHAR"/>
+        <result property="pointcode" column="pointcode" jdbcType="VARCHAR"/>
+        <result property="pointdescription" column="pointdescription" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectAllMeasureinfo" resultMap="MeasureinfoResult">
+        select pointlabel, pointcode, pointdescription
+        from ${schemaname}.measureinfo
+    </select>
+</mapper>
