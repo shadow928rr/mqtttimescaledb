@@ -98,7 +98,38 @@ public class MqttConsumerCallBack implements MqttCallback {
 //            还缺动态创建表、动态插入、动态创建触发器（写在Controller层）
 //            boolean flag = mqttService.insertMqttList(mqttArrayList);
         stopWatch.start();
-        boolean flag = mqttService.insertTable(topics, mqttArrayList);
+        boolean flag = mqttService.insertTableMeasureOriginData(topics, mqttArrayList);
+        if (flag && Integer.parseInt(i) % 4 == 0) {
+            //查询数据并处理
+            mqttService.insertTableMeasureData(topics, 4, payLoad.size());
+            //将处理后的数据插入到表4-128
+        }
+        if (flag && Integer.parseInt(i) % 8 == 0) {
+            //查询数据并处理
+            mqttService.insertTableMeasureData(topics, 8, payLoad.size());
+            //将处理后的数据插入到表4-128
+        }
+        if (flag && Integer.parseInt(i) % 16 == 0) {
+            //查询数据并处理
+            mqttService.insertTableMeasureData(topics, 16, payLoad.size());
+            //将处理后的数据插入到表4-128
+        }
+        if (flag && Integer.parseInt(i) % 32 == 0) {
+            //查询数据并处理
+            mqttService.insertTableMeasureData(topics, 32, payLoad.size());
+            //将处理后的数据插入到表4-128
+        }
+        if (flag && Integer.parseInt(i) % 64 == 0) {
+            //查询数据并处理
+            mqttService.insertTableMeasureData(topics, 64, payLoad.size());
+            //将处理后的数据插入到表4-128
+        }
+        if (flag && Integer.parseInt(i) % 128 == 0) {
+            //查询数据并处理
+            mqttService.insertTableMeasureData(topics, 128, payLoad.size());
+            //将处理后的数据插入到表4-128
+        }
+
         stopWatch.stop();
         log.info(stopWatch.getTotalTimeSeconds() + "落库时间");
 

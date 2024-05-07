@@ -15,7 +15,10 @@ import java.util.List;
 public interface MqttService extends IService<Mqtt> {
 
     //动态插入
-    boolean insertTable(String name, List<Mqtt> mqttList);
+    boolean insertTableMeasureOriginData(String name, List<Mqtt> mqttList);
+
+    //压缩表数据4-128处理及插入
+    boolean insertTableMeasureData(String name,int value,int label);
 
     //查询序列，作为记录第几次采集
     String selectFlagNum(String sequenceName);
@@ -31,6 +34,7 @@ public interface MqttService extends IService<Mqtt> {
 
     //查询全部试验信息表
     List<Testinfo> selectAll(int current, int size, String testnamekeyword);
+
     //查询全部试验信息表给前端3d界面用
     List<Testinfo> threeDimensionalSelectAll();
 }

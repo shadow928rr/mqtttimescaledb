@@ -12,7 +12,7 @@
     </resultMap>
 
     <!--    将表名origindata修改为measureorigindata-->
-<!--    查询序列-->
+    <!--    查询序列-->
     <select id="selectFlagNum" resultType="string">
         --         select nextval('mqtt4_id')
         select nextval('${sequenceName}.measureorigindata_id')
@@ -21,14 +21,25 @@
         --         SELECT setval('mqtt4_id', 1, false)
         SELECT setval('${sequenceName}.${sequenceName}4_id', 1, false)
     </select>
-<!--    将表名origindata修改为measureorigindata-->
-    <insert id="insertTable">
+    <!--    将表名origindata修改为measureorigindata-->
+    <insert id="insertTableMeasureOriginData">
         insert into ${schemaName}.measureorigindata (temperature,pointlabel,collecttime,num)
         values
         <foreach collection="mqttList" item="item" index="index" separator=",">
             (#{item.temperature}, #{item.pointlabel}, #{item.collecttime}, #{item.num})
         </foreach>
     </insert>
+    <!--    动态插入测量4-128压缩数据-->
+    <insert id="insertTableMeasureData">
+        insert into ${schemaName}.${tableName} (temperature,pointlabel,collecttime)
+        values
+        <foreach collection="mqttList" item="item" index="index" separator=",">
+            (#{item.temperature}, #{item.pointlabel}, #{item.collecttime})
+        </foreach>
+    </insert>
+<!--    <select id="select">-->
+
+    <!--    </select>-->
     <!--    将表名origindata修改为measureorigindata-->
     <update id="createTableMeasureOriginData">
         -- 在指定模式下创建表
@@ -63,140 +74,140 @@
         -- 在指定模式下创建保存图数据的表
         CREATE TABLE IF NOT EXISTS "${schemaName}"."${tableName}"
         (
-            "charttitle"           varchar NULL,
+            "charttitle"          varchar NULL,
             "yaxismax"            float4  NULL,
             "yaxismin"            float4  NULL,
             "selectedpointstring" varchar NULL,
-            "timerange"            int4    NULL,
-            "id"                    serial4 NOT NULL,
+            "timerange"           int4    NULL,
+            "id"                  serial4 NOT NULL,
             PRIMARY KEY ("id")
         );
 
     </update>
-<!--    控制缓存表-->
+    <!--    控制缓存表-->
     <update id="createControlCacheTable">
         CREATE TABLE IF NOT EXISTS "${schemaName}"."${tableName}"
         (
-            "loopid" int4 NOT NULL,
-            "groupname" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
-            "maxcollecttime4" timestamptz,
-            "swaptime4" timestamptz,
-            "mincollecttime4" timestamptz,
-            "maxcurrent4" float4,
-            "mincurrent4" float4,
-            "maxvoltage4" float4,
-            "minvoltage4" float4,
-            "maxpower4" float4,
-            "minpower4" float4,
-            "maxcalculateerror4" float4,
-            "mincalculateerror4" float4,
-            "maxcalculatecurrent4" float4,
-            "mincalculatecurrent4" float4,
-            "maxcalculatetemperature4" float4,
-            "mincalculatetemperature4" float4,
-            "maxintegralvalue4" float4,
-            "minintegralvalue4" float4,
-            "maxderivativevalue4" float4,
-            "minderivativevalue4" float4,
-            "maxcollecttime8" timestamptz,
-            "swaptime8" timestamptz,
-            "mincollecttime8" timestamptz,
-            "maxcurrent8" float4,
-            "mincurrent8" float4,
-            "maxvoltage8" float4,
-            "minvoltage8" float4,
-            "maxpower8" float4,
-            "minpower8" float4,
-            "maxcalculateerror8" float4,
-            "mincalculateerror8" float4,
-            "maxcalculatecurrent8" float4,
-            "mincalculatecurrent8" float4,
-            "maxcalculatetemperature8" float4,
-            "mincalculatetemperature8" float4,
-            "maxintegralvalue8" float4,
-            "minintegralvalue8" float4,
-            "maxderivativevalue8" float4,
-            "minderivativevalue8" float4,
-            "maxcollecttime16" timestamptz,
-            "swaptime16" timestamptz,
-            "mincollecttime16" timestamptz,
-            "maxcurrent16" float4,
-            "mincurrent16" float4,
-            "maxvoltage16" float4,
-            "minvoltage16" float4,
-            "maxpower16" float4,
-            "minpower16" float4,
-            "maxcalculateerror16" float4,
-            "mincalculateerror16" float4,
-            "maxcalculatecurrent16" float4,
-            "mincalculatecurrent16" float4,
-            "maxcalculatetemperature16" float4,
-            "mincalculatetemperature16" float4,
-            "maxintegralvalue16" float4,
-            "minintegralvalue16" float4,
-            "maxderivativevalue16" float4,
-            "minderivativevalue16" float4,
-            "maxcollecttime32" timestamptz,
-            "swaptime32" timestamptz,
-            "mincollecttime32" timestamptz,
-            "maxcurrent32" float4,
-            "mincurrent32" float4,
-            "maxvoltage32" float4,
-            "minvoltage32" float4,
-            "maxpower32" float4,
-            "minpower32" float4,
-            "maxcalculateerror32" float4,
-            "mincalculateerror32" float4,
-            "maxcalculatecurrent32" float4,
-            "mincalculatecurrent32" float4,
-            "maxcalculatetemperature32" float4,
-            "mincalculatetemperature32" float4,
-            "maxintegralvalue32" float4,
-            "minintegralvalue32" float4,
-            "maxderivativevalue32" float4,
-            "minderivativevalue32" float4,
-            "maxcollecttime64" timestamptz,
-            "swaptime64" timestamptz,
-            "mincollecttime64" timestamptz,
-            "maxcurrent64" float4,
-            "mincurrent64" float4,
-            "maxvoltage64" float4,
-            "minvoltage64" float4,
-            "maxpower64" float4,
-            "minpower64" float4,
-            "maxcalculateerror64" float4,
-            "mincalculateerror64" float4,
-            "maxcalculatecurrent64" float4,
-            "mincalculatecurrent64" float4,
-            "maxcalculatetemperature64" float4,
-            "mincalculatetemperature64" float4,
-            "maxintegralvalue64" float4,
-            "minintegralvalue64" float4,
-            "maxderivativevalue64" float4,
-            "minderivativevalue64" float4,
-            "maxcollecttime128" timestamptz,
-            "swaptime128" timestamptz,
-            "mincollecttime128" timestamptz,
-            "maxcurrent128" float4,
-            "mincurrent128" float4,
-            "maxvoltage128" float4,
-            "minvoltage128" float4,
-            "maxpower128" float4,
-            "minpower128" float4,
-            "maxcalculateerror128" float4,
-            "mincalculateerror128" float4,
-            "maxcalculatecurrent128" float4,
-            "mincalculatecurrent128" float4,
+            "loopid"                     int4                                        NOT NULL,
+            "groupname"                  varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
+            "maxcollecttime4"            timestamptz,
+            "swaptime4"                  timestamptz,
+            "mincollecttime4"            timestamptz,
+            "maxcurrent4"                float4,
+            "mincurrent4"                float4,
+            "maxvoltage4"                float4,
+            "minvoltage4"                float4,
+            "maxpower4"                  float4,
+            "minpower4"                  float4,
+            "maxcalculateerror4"         float4,
+            "mincalculateerror4"         float4,
+            "maxcalculatecurrent4"       float4,
+            "mincalculatecurrent4"       float4,
+            "maxcalculatetemperature4"   float4,
+            "mincalculatetemperature4"   float4,
+            "maxintegralvalue4"          float4,
+            "minintegralvalue4"          float4,
+            "maxderivativevalue4"        float4,
+            "minderivativevalue4"        float4,
+            "maxcollecttime8"            timestamptz,
+            "swaptime8"                  timestamptz,
+            "mincollecttime8"            timestamptz,
+            "maxcurrent8"                float4,
+            "mincurrent8"                float4,
+            "maxvoltage8"                float4,
+            "minvoltage8"                float4,
+            "maxpower8"                  float4,
+            "minpower8"                  float4,
+            "maxcalculateerror8"         float4,
+            "mincalculateerror8"         float4,
+            "maxcalculatecurrent8"       float4,
+            "mincalculatecurrent8"       float4,
+            "maxcalculatetemperature8"   float4,
+            "mincalculatetemperature8"   float4,
+            "maxintegralvalue8"          float4,
+            "minintegralvalue8"          float4,
+            "maxderivativevalue8"        float4,
+            "minderivativevalue8"        float4,
+            "maxcollecttime16"           timestamptz,
+            "swaptime16"                 timestamptz,
+            "mincollecttime16"           timestamptz,
+            "maxcurrent16"               float4,
+            "mincurrent16"               float4,
+            "maxvoltage16"               float4,
+            "minvoltage16"               float4,
+            "maxpower16"                 float4,
+            "minpower16"                 float4,
+            "maxcalculateerror16"        float4,
+            "mincalculateerror16"        float4,
+            "maxcalculatecurrent16"      float4,
+            "mincalculatecurrent16"      float4,
+            "maxcalculatetemperature16"  float4,
+            "mincalculatetemperature16"  float4,
+            "maxintegralvalue16"         float4,
+            "minintegralvalue16"         float4,
+            "maxderivativevalue16"       float4,
+            "minderivativevalue16"       float4,
+            "maxcollecttime32"           timestamptz,
+            "swaptime32"                 timestamptz,
+            "mincollecttime32"           timestamptz,
+            "maxcurrent32"               float4,
+            "mincurrent32"               float4,
+            "maxvoltage32"               float4,
+            "minvoltage32"               float4,
+            "maxpower32"                 float4,
+            "minpower32"                 float4,
+            "maxcalculateerror32"        float4,
+            "mincalculateerror32"        float4,
+            "maxcalculatecurrent32"      float4,
+            "mincalculatecurrent32"      float4,
+            "maxcalculatetemperature32"  float4,
+            "mincalculatetemperature32"  float4,
+            "maxintegralvalue32"         float4,
+            "minintegralvalue32"         float4,
+            "maxderivativevalue32"       float4,
+            "minderivativevalue32"       float4,
+            "maxcollecttime64"           timestamptz,
+            "swaptime64"                 timestamptz,
+            "mincollecttime64"           timestamptz,
+            "maxcurrent64"               float4,
+            "mincurrent64"               float4,
+            "maxvoltage64"               float4,
+            "minvoltage64"               float4,
+            "maxpower64"                 float4,
+            "minpower64"                 float4,
+            "maxcalculateerror64"        float4,
+            "mincalculateerror64"        float4,
+            "maxcalculatecurrent64"      float4,
+            "mincalculatecurrent64"      float4,
+            "maxcalculatetemperature64"  float4,
+            "mincalculatetemperature64"  float4,
+            "maxintegralvalue64"         float4,
+            "minintegralvalue64"         float4,
+            "maxderivativevalue64"       float4,
+            "minderivativevalue64"       float4,
+            "maxcollecttime128"          timestamptz,
+            "swaptime128"                timestamptz,
+            "mincollecttime128"          timestamptz,
+            "maxcurrent128"              float4,
+            "mincurrent128"              float4,
+            "maxvoltage128"              float4,
+            "minvoltage128"              float4,
+            "maxpower128"                float4,
+            "minpower128"                float4,
+            "maxcalculateerror128"       float4,
+            "mincalculateerror128"       float4,
+            "maxcalculatecurrent128"     float4,
+            "mincalculatecurrent128"     float4,
             "maxcalculatetemperature128" float4,
             "mincalculatetemperature128" float4,
-            "maxintegralvalue128" float4,
-            "minintegralvalue128" float4,
-            "maxderivativevalue128" float4,
-            "minderivativevalue128" float4,
+            "maxintegralvalue128"        float4,
+            "minintegralvalue128"        float4,
+            "maxderivativevalue128"      float4,
+            "minderivativevalue128"      float4,
             PRIMARY KEY ("loopid", "groupname")
         );
     </update>
-<!--采集缓存表-->
+    <!--采集缓存表-->
     <update id="createMeasureCacheTable">
         -- 在指定模式下创建缓存表
         CREATE TABLE IF NOT EXISTS "${schemaName}"."${tableName}"
@@ -260,47 +271,47 @@
     </update>
     <!--    将表名origindata修改为measureorigindata-->
     <update id="createTrigger">
-<!--        <![CDATA[]]>-->
+        <!--        <![CDATA[]]>-->
         -- 创建函数
         CREATE OR REPLACE FUNCTION "${schemaName}"."insert_mqtt4"()
-            RETURNS "pg_catalog"."trigger" AS $BODY$
-                DECLARE
-                    i                 INT;
-                    j                 INT;
-                    maxtemperature4   FLOAT;
-                    mintemperature4   FLOAT;
-                    maxtemperature8   FLOAT;
-                    mintemperature8   FLOAT;
-                    maxtemperature16  FLOAT;
-                    mintemperature16  FLOAT;
-                    maxtemperature32  FLOAT;
-                    mintemperature32  FLOAT;
-                    maxtemperature64  FLOAT;
-                    mintemperature64  FLOAT;
-                    maxtemperature128 FLOAT;
-                    mintemperature128 FLOAT;
-                    swaptimestamp4    timestamptz;
-                    swaptimestamp8    timestamptz;
-                    swaptimestamp16   timestamptz;
-                    swaptimestamp32   timestamptz;
-                    swaptimestamp64   timestamptz;
-                    swaptimestamp128  timestamptz;
+        RETURNS "pg_catalog"."trigger" AS $BODY$
+        DECLARE
+        i INT;
+        j INT;
+        maxtemperature4 FLOAT;
+        mintemperature4 FLOAT;
+        maxtemperature8 FLOAT;
+        mintemperature8 FLOAT;
+        maxtemperature16 FLOAT;
+        mintemperature16 FLOAT;
+        maxtemperature32 FLOAT;
+        mintemperature32 FLOAT;
+        maxtemperature64 FLOAT;
+        mintemperature64 FLOAT;
+        maxtemperature128 FLOAT;
+        mintemperature128 FLOAT;
+        swaptimestamp4 timestamptz;
+        swaptimestamp8 timestamptz;
+        swaptimestamp16 timestamptz;
+        swaptimestamp32 timestamptz;
+        swaptimestamp64 timestamptz;
+        swaptimestamp128 timestamptz;
         BEGIN
-            SELECT DISTINCT pointlabel INTO j FROM "${schemaName}".measureinfo ORDER BY pointlabel DESC LIMIT 1;
+        SELECT DISTINCT pointlabel INTO j FROM "${schemaName}".measureinfo ORDER BY pointlabel DESC LIMIT 1;
 
-            select maxdata4 into maxtemperature4 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-            select minidata4 into mintemperature4 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-            select maxdata8 into maxtemperature8 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-            select minidata8 into mintemperature8 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-            select maxdata16 into maxtemperature16 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-            select minidata16 into mintemperature16 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-            select maxdata32 into maxtemperature32 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-            select minidata32 into mintemperature32 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-            select maxdata64 into maxtemperature64 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-            select minidata64 into mintemperature64 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-            select maxdata128 into maxtemperature128 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-            select minidata128 into mintemperature128 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-            -- 更新最大值，最小值4
+        select maxdata4 into maxtemperature4 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        select minidata4 into mintemperature4 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        select maxdata8 into maxtemperature8 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        select minidata8 into mintemperature8 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        select maxdata16 into maxtemperature16 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        select minidata16 into mintemperature16 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        select maxdata32 into maxtemperature32 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        select minidata32 into mintemperature32 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        select maxdata64 into maxtemperature64 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        select minidata64 into mintemperature64 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        select maxdata128 into maxtemperature128 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        select minidata128 into mintemperature128 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        -- 更新最大值，最小值4
         <![CDATA[
             IF maxtemperature4<=NEW.temperature OR maxtemperature4 IS NULL THEN
                 UPDATE "${schemaName}".measurecache SET maxdata4=NEW.temperature,maxcalculatetime4=NEW.collecttime where pointlabel=NEW.pointlabel;
@@ -367,231 +378,269 @@
             ]]>
 
         --更新时间，及对表4插入
-            IF NEW.num%4 = 0 AND NEW.pointlabel=j THEN
-                select swaptime4 into swaptimestamp4 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-                FOR i IN 1..j LOOP
-                        if (select maxcalculatetime4 from "${schemaName}".measurecache where pointlabel = i)>(select mincalculatetime4 from "${schemaName}".measurecache where pointlabel = i) THEN
-                            UPDATE "${schemaName}".measurecache SET maxcalculatetime4=NEW.collecttime where pointlabel=i;
-                            UPDATE "${schemaName}".measurecache SET mincalculatetime4=swaptimestamp4 where pointlabel=i;
-                        ELSE
-                            UPDATE "${schemaName}".measurecache SET maxcalculatetime4=swaptimestamp4 where pointlabel=i;
-                            UPDATE "${schemaName}".measurecache SET mincalculatetime4=NEW.collecttime where pointlabel=i;
-                        END if;
-                    END LOOP;
-                INSERT INTO "${schemaName}".measuredata4 (pointlabel,temperature,collecttime) select pointlabel,minidata4,mincalculatetime4 from "${schemaName}".measurecache;
-                INSERT INTO "${schemaName}".measuredata4 (pointlabel,temperature,collecttime) select pointlabel,maxdata4,maxcalculatetime4 from "${schemaName}".measurecache;
-                UPDATE "${schemaName}".measurecache set minidata4 = NULL;
-                UPDATE "${schemaName}".measurecache set maxdata4 = NULL;
-            ELSE
-                IF NEW.num%2 = 0 AND NEW.pointlabel=j THEN
-                    FOR i IN 1..j LOOP
-                            UPDATE "${schemaName}".measurecache SET swaptime4=NEW.collecttime where pointlabel=i;
-                        END LOOP;
-                END IF;
-            END IF;
+        IF NEW.num%4 = 0 AND NEW.pointlabel=j THEN
+        select swaptime4 into swaptimestamp4 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        FOR i IN 1..j LOOP
+        if (select maxcalculatetime4 from "${schemaName}".measurecache where pointlabel = i)>(select mincalculatetime4
+        from "${schemaName}".measurecache where pointlabel = i) THEN
+        UPDATE "${schemaName}".measurecache SET maxcalculatetime4=NEW.collecttime where pointlabel=i;
+        UPDATE "${schemaName}".measurecache SET mincalculatetime4=swaptimestamp4 where pointlabel=i;
+        ELSE
+        UPDATE "${schemaName}".measurecache SET maxcalculatetime4=swaptimestamp4 where pointlabel=i;
+        UPDATE "${schemaName}".measurecache SET mincalculatetime4=NEW.collecttime where pointlabel=i;
+        END if;
+        END LOOP;
+        INSERT INTO "${schemaName}".measuredata4 (pointlabel,temperature,collecttime) select
+        pointlabel,minidata4,mincalculatetime4 from "${schemaName}".measurecache;
+        INSERT INTO "${schemaName}".measuredata4 (pointlabel,temperature,collecttime) select
+        pointlabel,maxdata4,maxcalculatetime4 from "${schemaName}".measurecache;
+        UPDATE "${schemaName}".measurecache set minidata4 = NULL;
+        UPDATE "${schemaName}".measurecache set maxdata4 = NULL;
+        ELSE
+        IF NEW.num%2 = 0 AND NEW.pointlabel=j THEN
+        FOR i IN 1..j LOOP
+        UPDATE "${schemaName}".measurecache SET swaptime4=NEW.collecttime where pointlabel=i;
+        END LOOP;
+        END IF;
+        END IF;
 
-            --更新时间，及对表8插入
-            IF NEW.num%8 = 0 AND NEW.pointlabel=j THEN
-                select swaptime8 into swaptimestamp8 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-                FOR i IN 1..j LOOP
-                        if (select maxcalculatetime8 from "${schemaName}".measurecache where pointlabel = i)>(select mincalculatetime8 from "${schemaName}".measurecache where pointlabel = i) THEN
-                            UPDATE "${schemaName}".measurecache SET maxcalculatetime8=NEW.collecttime where pointlabel=i;
-                            UPDATE "${schemaName}".measurecache SET mincalculatetime8=swaptimestamp8 where pointlabel=i;
-                        ELSE
-                            UPDATE "${schemaName}".measurecache SET maxcalculatetime8=swaptimestamp8 where pointlabel=i;
-                            UPDATE "${schemaName}".measurecache SET mincalculatetime8=NEW.collecttime where pointlabel=i;
-                        END if;
-                    END LOOP;
-                INSERT INTO "${schemaName}".measuredata8 (pointlabel,temperature,collecttime) select pointlabel,minidata8,maxcalculatetime8 from "${schemaName}".measurecache;
-                INSERT INTO "${schemaName}".measuredata8 (pointlabel,temperature,collecttime) select pointlabel,maxdata8,mincalculatetime8 from "${schemaName}".measurecache;
-                UPDATE "${schemaName}".measurecache set minidata8 = NULL;
-                UPDATE "${schemaName}".measurecache set maxdata8 = NULL;
-            ELSE
-                IF NEW.num%4 = 0 AND NEW.pointlabel=j THEN
-                    FOR i IN 1..j LOOP
-                            UPDATE "${schemaName}".measurecache SET swaptime8=NEW.collecttime where pointlabel=i;
-                        END LOOP;
-                END IF;
-            END IF;
+        --更新时间，及对表8插入
+        IF NEW.num%8 = 0 AND NEW.pointlabel=j THEN
+        select swaptime8 into swaptimestamp8 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        FOR i IN 1..j LOOP
+        if (select maxcalculatetime8 from "${schemaName}".measurecache where pointlabel = i)>(select mincalculatetime8
+        from "${schemaName}".measurecache where pointlabel = i) THEN
+        UPDATE "${schemaName}".measurecache SET maxcalculatetime8=NEW.collecttime where pointlabel=i;
+        UPDATE "${schemaName}".measurecache SET mincalculatetime8=swaptimestamp8 where pointlabel=i;
+        ELSE
+        UPDATE "${schemaName}".measurecache SET maxcalculatetime8=swaptimestamp8 where pointlabel=i;
+        UPDATE "${schemaName}".measurecache SET mincalculatetime8=NEW.collecttime where pointlabel=i;
+        END if;
+        END LOOP;
+        INSERT INTO "${schemaName}".measuredata8 (pointlabel,temperature,collecttime) select
+        pointlabel,minidata8,maxcalculatetime8 from "${schemaName}".measurecache;
+        INSERT INTO "${schemaName}".measuredata8 (pointlabel,temperature,collecttime) select
+        pointlabel,maxdata8,mincalculatetime8 from "${schemaName}".measurecache;
+        UPDATE "${schemaName}".measurecache set minidata8 = NULL;
+        UPDATE "${schemaName}".measurecache set maxdata8 = NULL;
+        ELSE
+        IF NEW.num%4 = 0 AND NEW.pointlabel=j THEN
+        FOR i IN 1..j LOOP
+        UPDATE "${schemaName}".measurecache SET swaptime8=NEW.collecttime where pointlabel=i;
+        END LOOP;
+        END IF;
+        END IF;
 
-            --更新时间，及对表16插入
-            IF NEW.num%16 = 0 AND NEW.pointlabel=j THEN
-                select swaptime16 into swaptimestamp16 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-                FOR i IN 1..j LOOP
-                        if (select maxcalculatetime16 from "${schemaName}".measurecache where pointlabel = i)>(select mincalculatetime16 from "${schemaName}".measurecache where pointlabel = i) THEN
-                            UPDATE "${schemaName}".measurecache SET maxcalculatetime16=NEW.collecttime where pointlabel=i;
-                            UPDATE "${schemaName}".measurecache SET mincalculatetime16=swaptimestamp16 where pointlabel=i;
-                        ELSE
-                            UPDATE "${schemaName}".measurecache SET maxcalculatetime16=swaptimestamp16 where pointlabel=i;
-                            UPDATE "${schemaName}".measurecache SET mincalculatetime16=NEW.collecttime where pointlabel=i;
-                        END if;
-                    END LOOP;
-                INSERT INTO "${schemaName}".measuredata16 (pointlabel,temperature,collecttime) select pointlabel,minidata16,mincalculatetime16 from "${schemaName}".measurecache;
-                INSERT INTO "${schemaName}".measuredata16 (pointlabel,temperature,collecttime) select pointlabel,maxdata16,maxcalculatetime16 from "${schemaName}".measurecache;
-                UPDATE "${schemaName}".measurecache set minidata16 = NULL;
-                UPDATE "${schemaName}".measurecache set maxdata16 = NULL;
-            ELSE
-                IF NEW.num%8 = 0 AND NEW.pointlabel=j THEN
-                    FOR i IN 1..j LOOP
-                            UPDATE "${schemaName}".measurecache SET swaptime16=NEW.collecttime where pointlabel=i;
-                        END LOOP;
-                END IF;
-            END IF;
+        --更新时间，及对表16插入
+        IF NEW.num%16 = 0 AND NEW.pointlabel=j THEN
+        select swaptime16 into swaptimestamp16 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        FOR i IN 1..j LOOP
+        if (select maxcalculatetime16 from "${schemaName}".measurecache where pointlabel = i)>(select mincalculatetime16
+        from "${schemaName}".measurecache where pointlabel = i) THEN
+        UPDATE "${schemaName}".measurecache SET maxcalculatetime16=NEW.collecttime where pointlabel=i;
+        UPDATE "${schemaName}".measurecache SET mincalculatetime16=swaptimestamp16 where pointlabel=i;
+        ELSE
+        UPDATE "${schemaName}".measurecache SET maxcalculatetime16=swaptimestamp16 where pointlabel=i;
+        UPDATE "${schemaName}".measurecache SET mincalculatetime16=NEW.collecttime where pointlabel=i;
+        END if;
+        END LOOP;
+        INSERT INTO "${schemaName}".measuredata16 (pointlabel,temperature,collecttime) select
+        pointlabel,minidata16,mincalculatetime16 from "${schemaName}".measurecache;
+        INSERT INTO "${schemaName}".measuredata16 (pointlabel,temperature,collecttime) select
+        pointlabel,maxdata16,maxcalculatetime16 from "${schemaName}".measurecache;
+        UPDATE "${schemaName}".measurecache set minidata16 = NULL;
+        UPDATE "${schemaName}".measurecache set maxdata16 = NULL;
+        ELSE
+        IF NEW.num%8 = 0 AND NEW.pointlabel=j THEN
+        FOR i IN 1..j LOOP
+        UPDATE "${schemaName}".measurecache SET swaptime16=NEW.collecttime where pointlabel=i;
+        END LOOP;
+        END IF;
+        END IF;
 
-            --更新时间，及对表32插入
-            IF NEW.num%32 = 0 AND NEW.pointlabel=j THEN
-                select swaptime32 into swaptimestamp32 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-                FOR i IN 1..j LOOP
-                        if (select maxcalculatetime32 from "${schemaName}".measurecache where pointlabel = i)>(select mincalculatetime32 from "${schemaName}".measurecache where pointlabel = i) THEN
-                            UPDATE "${schemaName}".measurecache SET maxcalculatetime32=NEW.collecttime where pointlabel=i;
-                            UPDATE "${schemaName}".measurecache SET mincalculatetime32=swaptimestamp32 where pointlabel=i;
-                        ELSE
-                            UPDATE "${schemaName}".measurecache SET maxcalculatetime32=swaptimestamp32 where pointlabel=i;
-                            UPDATE "${schemaName}".measurecache SET mincalculatetime32=NEW.collecttime where pointlabel=i;
-                        END if;
-                    END LOOP;
-                INSERT INTO "${schemaName}".measuredata32 (pointlabel,temperature,collecttime) select pointlabel,minidata32,mincalculatetime32 from "${schemaName}".measurecache;
-                INSERT INTO "${schemaName}".measuredata32 (pointlabel,temperature,collecttime) select pointlabel,maxdata32,maxcalculatetime32 from "${schemaName}".measurecache;
-                UPDATE "${schemaName}".measurecache set minidata32 = NULL;
-                UPDATE "${schemaName}".measurecache set maxdata32 = NULL;
-            ELSE
-                IF NEW.num%16 = 0 AND NEW.pointlabel=j THEN
-                    FOR i IN 1..j LOOP
-                            UPDATE "${schemaName}".measurecache SET swaptime32=NEW.collecttime where pointlabel=i;
-                        END LOOP;
-                END IF;
-            END IF;
+        --更新时间，及对表32插入
+        IF NEW.num%32 = 0 AND NEW.pointlabel=j THEN
+        select swaptime32 into swaptimestamp32 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        FOR i IN 1..j LOOP
+        if (select maxcalculatetime32 from "${schemaName}".measurecache where pointlabel = i)>(select mincalculatetime32
+        from "${schemaName}".measurecache where pointlabel = i) THEN
+        UPDATE "${schemaName}".measurecache SET maxcalculatetime32=NEW.collecttime where pointlabel=i;
+        UPDATE "${schemaName}".measurecache SET mincalculatetime32=swaptimestamp32 where pointlabel=i;
+        ELSE
+        UPDATE "${schemaName}".measurecache SET maxcalculatetime32=swaptimestamp32 where pointlabel=i;
+        UPDATE "${schemaName}".measurecache SET mincalculatetime32=NEW.collecttime where pointlabel=i;
+        END if;
+        END LOOP;
+        INSERT INTO "${schemaName}".measuredata32 (pointlabel,temperature,collecttime) select
+        pointlabel,minidata32,mincalculatetime32 from "${schemaName}".measurecache;
+        INSERT INTO "${schemaName}".measuredata32 (pointlabel,temperature,collecttime) select
+        pointlabel,maxdata32,maxcalculatetime32 from "${schemaName}".measurecache;
+        UPDATE "${schemaName}".measurecache set minidata32 = NULL;
+        UPDATE "${schemaName}".measurecache set maxdata32 = NULL;
+        ELSE
+        IF NEW.num%16 = 0 AND NEW.pointlabel=j THEN
+        FOR i IN 1..j LOOP
+        UPDATE "${schemaName}".measurecache SET swaptime32=NEW.collecttime where pointlabel=i;
+        END LOOP;
+        END IF;
+        END IF;
 
-            --更新时间，及对表64插入
-            IF NEW.num%64 = 0 AND NEW.pointlabel=j THEN
-                select swaptime64 into swaptimestamp64 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-                FOR i IN 1..j LOOP
-                        if (select maxcalculatetime64 from "${schemaName}".measurecache where pointlabel = i)>(select mincalculatetime64 from "${schemaName}".measurecache where pointlabel = i) THEN
-                            UPDATE "${schemaName}".measurecache SET maxcalculatetime64=NEW.collecttime where pointlabel=i;
-                            UPDATE "${schemaName}".measurecache SET mincalculatetime64=swaptimestamp64 where pointlabel=i;
-                        ELSE
-                            UPDATE "${schemaName}".measurecache SET maxcalculatetime64=swaptimestamp64 where pointlabel=i;
-                            UPDATE "${schemaName}".measurecache SET mincalculatetime64=NEW.collecttime where pointlabel=i;
-                        END if;
-                    END LOOP;
-                INSERT INTO "${schemaName}".measuredata64 (pointlabel,temperature,collecttime) select pointlabel,minidata64,mincalculatetime64 from "${schemaName}".measurecache;
-                INSERT INTO "${schemaName}".measuredata64 (pointlabel,temperature,collecttime) select pointlabel,maxdata64,maxcalculatetime64 from "${schemaName}".measurecache;
-                UPDATE "${schemaName}".measurecache set minidata64 = NULL;
-                UPDATE "${schemaName}".measurecache set maxdata64 = NULL;
-            ELSE
-                IF NEW.num%32 = 0 AND NEW.pointlabel=j THEN
-                    FOR i IN 1..j LOOP
-                            UPDATE "${schemaName}".measurecache SET swaptime64=NEW.collecttime where pointlabel=i;
-                        END LOOP;
-                END IF;
-            END IF;
+        --更新时间，及对表64插入
+        IF NEW.num%64 = 0 AND NEW.pointlabel=j THEN
+        select swaptime64 into swaptimestamp64 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        FOR i IN 1..j LOOP
+        if (select maxcalculatetime64 from "${schemaName}".measurecache where pointlabel = i)>(select mincalculatetime64
+        from "${schemaName}".measurecache where pointlabel = i) THEN
+        UPDATE "${schemaName}".measurecache SET maxcalculatetime64=NEW.collecttime where pointlabel=i;
+        UPDATE "${schemaName}".measurecache SET mincalculatetime64=swaptimestamp64 where pointlabel=i;
+        ELSE
+        UPDATE "${schemaName}".measurecache SET maxcalculatetime64=swaptimestamp64 where pointlabel=i;
+        UPDATE "${schemaName}".measurecache SET mincalculatetime64=NEW.collecttime where pointlabel=i;
+        END if;
+        END LOOP;
+        INSERT INTO "${schemaName}".measuredata64 (pointlabel,temperature,collecttime) select
+        pointlabel,minidata64,mincalculatetime64 from "${schemaName}".measurecache;
+        INSERT INTO "${schemaName}".measuredata64 (pointlabel,temperature,collecttime) select
+        pointlabel,maxdata64,maxcalculatetime64 from "${schemaName}".measurecache;
+        UPDATE "${schemaName}".measurecache set minidata64 = NULL;
+        UPDATE "${schemaName}".measurecache set maxdata64 = NULL;
+        ELSE
+        IF NEW.num%32 = 0 AND NEW.pointlabel=j THEN
+        FOR i IN 1..j LOOP
+        UPDATE "${schemaName}".measurecache SET swaptime64=NEW.collecttime where pointlabel=i;
+        END LOOP;
+        END IF;
+        END IF;
 
-            --更新时间，及对表128插入
-            IF NEW.num%128 = 0 AND NEW.pointlabel=j THEN
-                select swaptime128 into swaptimestamp128 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
-                FOR i IN 1..j LOOP
-                        if (select maxcalculatetime128 from "${schemaName}".measurecache where pointlabel = i)>(select mincalculatetime128 from "${schemaName}".measurecache where pointlabel = i) THEN
-                            UPDATE "${schemaName}".measurecache SET maxcalculatetime128=NEW.collecttime where pointlabel=i;
-                            UPDATE "${schemaName}".measurecache SET mincalculatetime128=swaptimestamp128 where pointlabel=i;
-                        ELSE
-                            UPDATE "${schemaName}".measurecache SET maxcalculatetime128=swaptimestamp128 where pointlabel=i;
-                            UPDATE "${schemaName}".measurecache SET mincalculatetime128=NEW.collecttime where pointlabel=i;
-                        END if;
-                    END LOOP;
-                INSERT INTO "${schemaName}".measuredata128 (pointlabel,temperature,collecttime) select pointlabel,minidata128,mincalculatetime128 from "${schemaName}".measurecache;
-                INSERT INTO "${schemaName}".measuredata128 (pointlabel,temperature,collecttime) select pointlabel,maxdata128,maxcalculatetime128 from "${schemaName}".measurecache;
-                UPDATE "${schemaName}".measurecache set minidata128 = NULL;
-                UPDATE "${schemaName}".measurecache set maxdata128 = NULL;
-            ELSE
-                IF NEW.num%64 = 0 AND NEW.pointlabel=j THEN
-                    FOR i IN 1..j LOOP
-                            UPDATE "${schemaName}".measurecache SET swaptime128=NEW.collecttime where pointlabel=i;
-                        END LOOP;
-                END IF;
-            END IF;
-            RETURN NULL;
+        --更新时间，及对表128插入
+        IF NEW.num%128 = 0 AND NEW.pointlabel=j THEN
+        select swaptime128 into swaptimestamp128 from "${schemaName}".measurecache where pointlabel = NEW.pointlabel;
+        FOR i IN 1..j LOOP
+        if (select maxcalculatetime128 from "${schemaName}".measurecache where pointlabel = i)>(select
+        mincalculatetime128 from "${schemaName}".measurecache where pointlabel = i) THEN
+        UPDATE "${schemaName}".measurecache SET maxcalculatetime128=NEW.collecttime where pointlabel=i;
+        UPDATE "${schemaName}".measurecache SET mincalculatetime128=swaptimestamp128 where pointlabel=i;
+        ELSE
+        UPDATE "${schemaName}".measurecache SET maxcalculatetime128=swaptimestamp128 where pointlabel=i;
+        UPDATE "${schemaName}".measurecache SET mincalculatetime128=NEW.collecttime where pointlabel=i;
+        END if;
+        END LOOP;
+        INSERT INTO "${schemaName}".measuredata128 (pointlabel,temperature,collecttime) select
+        pointlabel,minidata128,mincalculatetime128 from "${schemaName}".measurecache;
+        INSERT INTO "${schemaName}".measuredata128 (pointlabel,temperature,collecttime) select
+        pointlabel,maxdata128,maxcalculatetime128 from "${schemaName}".measurecache;
+        UPDATE "${schemaName}".measurecache set minidata128 = NULL;
+        UPDATE "${schemaName}".measurecache set maxdata128 = NULL;
+        ELSE
+        IF NEW.num%64 = 0 AND NEW.pointlabel=j THEN
+        FOR i IN 1..j LOOP
+        UPDATE "${schemaName}".measurecache SET swaptime128=NEW.collecttime where pointlabel=i;
+        END LOOP;
+        END IF;
+        END IF;
+        RETURN NULL;
         END;
         $BODY$
         LANGUAGE plpgsql VOLATILE;
 
         CREATE TRIGGER "insert_mqtt4_trigger"
-            AFTER INSERT
-            ON "${schemaName}"."measureorigindata"
-            FOR EACH ROW
+        AFTER INSERT
+        ON "${schemaName}"."measureorigindata"
+        FOR EACH ROW
         EXECUTE PROCEDURE "${schemaName}"."insert_mqtt4"();
     </update>
-<!--    新增加监视表-->
+    <!--    新增加监视表-->
     <update id="createTableAlarmSolution">
         -- 在指定模式下创建表
         CREATE TABLE IF NOT EXISTS "${schemaName}"."${tableName}"
         (
-            "id"            serial4 NOT NULL,
-            "name"          varchar(255),
-            "createtime"    timestamptz,
-            "alarmcontent"  json,
+            "id"           serial4 NOT NULL,
+            "name"         varchar(255),
+            "createtime"   timestamptz,
+            "alarmcontent" json,
             PRIMARY KEY ("id")
         );
     </update>
-<!--    新增加控制表-->
+    <!--    新增加控制表-->
     <update id="createTableControlInfo">
         -- 在指定模式下创建表
         CREATE TABLE IF NOT EXISTS "${schemaName}"."${tableName}"
         (
-            "id"            serial4 NOT NULL,
-            "createtime"    timestamptz,
-            "content"       varchar(3000),
-            "name"          varchar(255),
-            "testname"      varchar(255),
+            "id"         serial4 NOT NULL,
+            "createtime" timestamptz,
+            "content"    varchar(3000),
+            "name"       varchar(255),
+            "testname"   varchar(255),
             PRIMARY KEY ("id")
         );
     </update>
-<!--    控制总表-->
+    <!--    控制总表-->
     <update id="createTableControlOriginData">
         -- 在指定模式下创建表
         CREATE TABLE IF NOT EXISTS "${schemaName}"."${tableName}"
         (
-            "current"               float4,
-            "voltage"               int4,
-            "loopid"                int4,
-            "collecttime"           timestamptz NOT NULL,
-            "num"                   int4,
-            "power"                 float4,
-            "groupname"             varchar(255),
-            "calculateerror"        float4,
-            "calculatecurrent"      float4,
-            "calculatetemperature"  float4,
-            "integralvalue"         float4,
-            "derivativevalue"       float4
+            "current"              float4,
+            "voltage"              int4,
+            "loopid"               int4,
+            "collecttime"          timestamptz NOT NULL,
+            "num"                  int4,
+            "power"                float4,
+            "groupname"            varchar(255),
+            "calculateerror"       float4,
+            "calculatecurrent"     float4,
+            "calculatetemperature" float4,
+            "integralvalue"        float4,
+            "derivativevalue"      float4
         );
     </update>
     <update id="createTableControlData">
         -- 在指定模式下创建表
         CREATE TABLE IF NOT EXISTS "${schemaName}"."${tableName}"
         (
-            "current"               float4,
-            "voltage"               int4,
-            "loopid"                int4,
-            "collecttime"           timestamptz NOT NULL,
-            "power"                 float4,
-            "groupname"             varchar(255),
-            "calculateerror"        float4,
-            "calculatecurrent"      float4,
-            "calculatetemperature"  float4,
-            "integralvalue"         float4,
-            "derivativevalue"       float4
+            "current"              float4,
+            "voltage"              int4,
+            "loopid"               int4,
+            "collecttime"          timestamptz NOT NULL,
+            "power"                float4,
+            "groupname"            varchar(255),
+            "calculateerror"       float4,
+            "calculatecurrent"     float4,
+            "calculatetemperature" float4,
+            "integralvalue"        float4,
+            "derivativevalue"      float4
         );
     </update>
-<!--    工况表-->
+    <!--    工况表-->
     <update id="createTableWorkForm">
         -- 在指定模式下创建表
         CREATE TABLE IF NOT EXISTS "${schemaName}"."${tableName}"
         (
-            "id"                    serial4 NOT NULL,
-            "createtime"            timestamptz NOT NULL,
-            "formcontent"           json,
-            "phasename"             varchar(255),
-            "formtype"              int8,
-            "groupname"             varchar(255)
+            "id"          serial4     NOT NULL,
+            "createtime"  timestamptz NOT NULL,
+            "formcontent" json,
+            "phasename"   varchar(255),
+            "formtype"    int8,
+            "groupname"   varchar(255)
         );
     </update>
+    <select id="selectMeasureOrigin" resultType="com.guo.mqtttimescaledb.eneity.Mqtt">
+
+        with last_num as (select last(num,collecttime) as num from ${schemaName}.measureorigindata)
+        select * from ${schemaName}.measureorigindata
+        where num BETWEEN(select num - ${value} + 1 from last_num) and (select num from last_num) ORDER BY pointlabel,collecttime DESC;
+
+--         SELECT *
+--         FROM (
+--                  SELECT *, ROW_NUMBER() OVER (PARTITION BY pointlabel ORDER BY collecttime DESC) as rn
+--                  FROM ${schemaName}.measureorigindata
+--              ) AS ranked
+--         WHERE rn &lt;= ${value};
+    </select>
+    <select id="selectMeasureData" resultType="com.guo.mqtttimescaledb.eneity.Mqtt">
+
+        with last_num as (select last(num,collecttime) as num from ${schemaName}.measuredata4)
+        select * from ${schemaName}.measuredata4
+        where num BETWEEN(select num - ${value} + 1 from last_num) and (select num from last_num) ORDER BY pointlabel,collecttime DESC;
+
+    </select>
 </mapper>

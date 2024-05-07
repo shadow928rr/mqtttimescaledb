@@ -14,13 +14,19 @@ import java.util.List;
  */
 public interface MqttMapper extends BaseMapper<Mqtt> {
     //查询序列值并加一
+    List<Mqtt> selectMeasureOrigin(@Param("schemaName") String schemaName, @Param("value") int value);
+
+    //查询序列值并加一
     String selectFlagNum(@Param("sequenceName") String sequenceName);
 
     //将序列值归为1
     String setFlagNum(@Param("sequenceName") String sequenceName);
 
     //动态批量插入
-    boolean insertTable(@Param("schemaName") String schemaName, @Param("mqttList") List<Mqtt> mqttList);
+    boolean insertTableMeasureOriginData(@Param("schemaName") String schemaName, @Param("mqttList") List<Mqtt> mqttList);
+
+    //动态插入测量4-128压缩数据
+    boolean insertTableMeasureData(@Param("schemaName") String schemaName, @Param("tableName") String tableName, @Param("mqttList") List<Mqtt> mqttList);
 
     //动态创建模式
     boolean createSchema(@Param("schemaName") String schemaName);
