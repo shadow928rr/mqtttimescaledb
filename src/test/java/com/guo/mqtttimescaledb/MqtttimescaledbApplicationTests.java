@@ -5,12 +5,10 @@ import com.guo.mqtttimescaledb.mapper.MqttMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.StopWatch;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -20,71 +18,33 @@ class MqtttimescaledbApplicationTests {
 
     @Test
     void contextLoads() {
-        List<Mqtt> mqttList = mqttMapper.selectMeasureOrigin("test0407", 4);
-//        i为点数数量
-        List<Mqtt> list = new ArrayList<>();
-        for (int i = 1; i <= 2; i++) {
-            Mqtt maxMqtt = new Mqtt();
-            Mqtt minMqtt = new Mqtt();
-            int finalI = i;
-            List<Mqtt> collect = mqttList.stream()
-                    .filter(data -> data.getPointlabel() == finalI)
-                    .collect(Collectors.toList());
-            double maxTemperature = collect.stream()
-                    .mapToDouble(Mqtt::getTemperature)
-                    .max().orElse(0);
 
-            Optional<Mqtt> maxTemperatureObject = collect.stream()
-                    .max(Comparator.comparingDouble(Mqtt::getTemperature));
-            System.out.println(maxTemperatureObject);
-            OffsetDateTime maxOffsetDateTime = maxTemperatureObject.map(Mqtt::getCollecttime).orElse(null);
 
-            System.out.println("最大值对应的时间" + maxOffsetDateTime);
+        List<Mqtt> mqttList = mqttMapper.selectMeasureOrigin("test0506", 4);
+        List<Mqtt> newList = new LinkedList<>();
 
-            double minTemperature = collect.stream()
-                    .mapToDouble(Mqtt::getTemperature)
-                    .min().orElse(0);
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        Map<Long, List<Mqtt>> collect = mqttList.stream()
+                .collect(Collectors.groupingBy(Mqtt::getPointlabel));
 
-            Optional<Mqtt> minTemperatureObject = collect.stream()
-                    .min(Comparator.comparingDouble(Mqtt::getTemperature));
-            System.out.println(minTemperatureObject);
-            OffsetDateTime minOffsetDateTime = minTemperatureObject.map(Mqtt::getCollecttime).orElse(null);
-            System.out.println("最小值对应的时间" + minOffsetDateTime);
-            maxMqtt.setTemperature(Float.parseFloat(String.valueOf(maxTemperature)));
-            minMqtt.setTemperature(Float.parseFloat(String.valueOf(minTemperature)));
-//            固定的早晚时间
-            OffsetDateTime lastCollectTime = collect.get(0).getCollecttime();
-            OffsetDateTime firstCollectTime = collect.get(2).getCollecttime();
+        for (Map.Entry<Long, List<Mqtt>> entry : collect.entrySet()) {
+            Long pointLabel = entry.getKey();
+            List<Mqtt> itemList = entry.getValue().stream().sorted(Comparator.comparing(Mqtt::getCollecttime)).collect(Collectors.toList());
+//            Collections.sort(itemList, Comparator.comparing(Mqtt::getTemperature));
+            Mqtt itemMin = itemList.stream().min(Comparator.comparing(Mqtt::getTemperature)).orElse(null);
+            Mqtt itemMax = itemList.stream().max(Comparator.comparing(Mqtt::getTemperature)).orElse(null);
 
-            maxMqtt.setPointlabel(Long.parseLong(String.valueOf(i)));
-            minMqtt.setPointlabel(Long.parseLong(String.valueOf(i)));
-            //判断哪个数值在前面
-            if (maxOffsetDateTime.compareTo(minOffsetDateTime) > 0) {
-                maxMqtt.setCollecttime(lastCollectTime);
-                minMqtt.setCollecttime(firstCollectTime);
-                System.out.println("maxOffsetDateTime更大");
-                list.add(minMqtt);
-                list.add(maxMqtt);
+            if (itemMin.getCollecttime().isAfter(itemMax.getCollecttime())) {
+                newList.add(new Mqtt(itemMax.getTemperature(), pointLabel, itemList.get(1).getCollecttime(), itemList.get(1).getNum()));
+                newList.add(new Mqtt(itemMin.getTemperature(), pointLabel, itemList.get(3).getCollecttime(), itemList.get(3).getNum()));
             } else {
-                maxMqtt.setCollecttime(firstCollectTime);
-                minMqtt.setCollecttime(lastCollectTime);
-                System.out.println("minOffsetDateTime更大");
-                list.add(maxMqtt);
-                list.add(minMqtt);
+                newList.add(new Mqtt(itemMin.getTemperature(), pointLabel, itemList.get(1).getCollecttime(), itemList.get(1).getNum()));
+                newList.add(new Mqtt(itemMax.getTemperature(), pointLabel, itemList.get(3).getCollecttime(), itemList.get(3).getNum()));
             }
-            System.out.println("Temperature最大值：" + maxTemperature);
-            System.out.println("Temperature最小值：" + minTemperature);
-            System.out.println("Collecttime中间时间：" + firstCollectTime);
-            System.out.println("Collecttime最后时间：" + lastCollectTime);
-            System.out.println("当前label为" + i);
         }
-        boolean insert = mqttMapper.insertTableMeasureData("test0407", "measuredata" + 4, list);
-        if (insert) {
-            System.out.println("压缩" + 4 + "成功");
-        } else {
-            System.out.println("压缩" + 4 + "失败");
-        }
-
+//        System.out.println(newList);
+        stopWatch.stop();
+        System.out.println(stopWatch.getTotalTimeSeconds() + "处理时间");
     }
-
 }

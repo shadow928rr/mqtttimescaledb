@@ -99,35 +99,41 @@ public class MqttConsumerCallBack implements MqttCallback {
 //            boolean flag = mqttService.insertMqttList(mqttArrayList);
         stopWatch.start();
         boolean flag = mqttService.insertTableMeasureOriginData(topics, mqttArrayList);
+        //从从表获取
         if (flag && Integer.parseInt(i) % 4 == 0) {
             //查询数据并处理
-            mqttService.insertTableMeasureData(topics, 4, payLoad.size());
-            //将处理后的数据插入到表4-128
+            mqttService.insertTableMeasureData4(topics, 4, payLoad.size());
+            //将处理后的数据插入到表4
         }
+        //后面的数据从压缩表4获取
         if (flag && Integer.parseInt(i) % 8 == 0) {
             //查询数据并处理
-            mqttService.insertTableMeasureData(topics, 8, payLoad.size());
-            //将处理后的数据插入到表4-128
+            mqttService.insertTableMeasureDataOther(topics, 8, payLoad.size());
+            //将处理后的数据插入到表8
         }
+        //后面的数据从压缩表8获取
         if (flag && Integer.parseInt(i) % 16 == 0) {
             //查询数据并处理
-            mqttService.insertTableMeasureData(topics, 16, payLoad.size());
-            //将处理后的数据插入到表4-128
+            mqttService.insertTableMeasureDataOther(topics, 16, payLoad.size());
+            //将处理后的数据插入到表16
         }
+        //后面的数据从压缩表16获取
         if (flag && Integer.parseInt(i) % 32 == 0) {
             //查询数据并处理
-            mqttService.insertTableMeasureData(topics, 32, payLoad.size());
-            //将处理后的数据插入到表4-128
+            mqttService.insertTableMeasureDataOther(topics, 32, payLoad.size());
+            //将处理后的数据插入到表32
         }
+        //后面的数据从压缩表32获取
         if (flag && Integer.parseInt(i) % 64 == 0) {
             //查询数据并处理
-            mqttService.insertTableMeasureData(topics, 64, payLoad.size());
-            //将处理后的数据插入到表4-128
+            mqttService.insertTableMeasureDataOther(topics, 64, payLoad.size());
+            //将处理后的数据插入到表64
         }
+        //后面的数据从压缩表64获取
         if (flag && Integer.parseInt(i) % 128 == 0) {
             //查询数据并处理
-            mqttService.insertTableMeasureData(topics, 128, payLoad.size());
-            //将处理后的数据插入到表4-128
+            mqttService.insertTableMeasureDataOther(topics, 128, payLoad.size());
+            //将处理后的数据插入到表128
         }
 
         stopWatch.stop();

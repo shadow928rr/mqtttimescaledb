@@ -17,8 +17,11 @@ public interface MqttService extends IService<Mqtt> {
     //动态插入
     boolean insertTableMeasureOriginData(String name, List<Mqtt> mqttList);
 
-    //压缩表数据4-128处理及插入
-    boolean insertTableMeasureData(String name,int value,int label);
+    //压缩表数据4处理及插入
+    boolean insertTableMeasureData4(String name, int value, int label);
+
+    //压缩表数据8-128处理及插入
+    boolean insertTableMeasureDataOther(String name, int value, int label);
 
     //查询序列，作为记录第几次采集
     String selectFlagNum(String sequenceName);

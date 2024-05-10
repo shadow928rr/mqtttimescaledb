@@ -13,8 +13,11 @@ import java.util.List;
  * @Entity com.guo.mqtttimescaledb.eneity.Mqtt
  */
 public interface MqttMapper extends BaseMapper<Mqtt> {
-    //查询序列值并加一
+    //查询总表数据
     List<Mqtt> selectMeasureOrigin(@Param("schemaName") String schemaName, @Param("value") int value);
+
+    //查询压缩表数据
+    List<Mqtt> selectMeasureData(@Param("schemaName") String schemaName, @Param("value") int value);
 
     //查询序列值并加一
     String selectFlagNum(@Param("sequenceName") String sequenceName);

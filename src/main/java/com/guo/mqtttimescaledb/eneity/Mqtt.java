@@ -2,7 +2,10 @@ package com.guo.mqtttimescaledb.eneity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import jdk.nashorn.internal.objects.annotations.Constructor;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
@@ -12,6 +15,8 @@ import java.time.OffsetDateTime;
  */
 @TableName(value = "mqtt")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Mqtt implements Serializable {
 
     /**

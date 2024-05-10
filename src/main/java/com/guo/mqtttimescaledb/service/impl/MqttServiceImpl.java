@@ -53,19 +53,118 @@ public class MqttServiceImpl extends ServiceImpl<MqttMapper, Mqtt> implements Mq
 
     /**
      * label测点数量
-     * value查询4-128的数量及对应的measuredata4-128
+     * value查询4的数量及对应的measuredata4
      * schemaName模式名称
      */
     @Transactional
     @Override
-    public boolean insertTableMeasureData(String schemaName, int value, int label) {
+    public boolean insertTableMeasureData4(String schemaName, int value, int label) {
         StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        List<Mqtt> mqttList = mqttMapper.selectMeasureOrigin(schemaName, value);
-        stopWatch.stop();
-        log.info(stopWatch.getTotalTimeSeconds() + "查询时间");
+        List<Mqtt> list = new LinkedList<>();
+        try {
+//            stopWatch.start();
+            List<Mqtt> mqttList = mqttMapper.selectMeasureOrigin(schemaName, value);
+//            stopWatch.stop();
+//            log.info(stopWatch.getTotalTimeSeconds() + "查询时间");
 //        i为点数数量
-        List<Mqtt> list = new ArrayList<>();
+            stopWatch.start();
+            for (int i = 1; i <= label; i++) {
+                Mqtt maxMqtt = new Mqtt();
+                Mqtt minMqtt = new Mqtt();
+                int finalI = i;
+                List<Mqtt> collect = mqttList.stream()
+                        .filter(data -> data.getPointlabel() == finalI)
+                        .collect(Collectors.toList());
+                double maxTemperature = collect.stream()
+                        .mapToDouble(Mqtt::getTemperature)
+                        .max().orElse(0);
+
+                Optional<Mqtt> maxTemperatureObject = collect.parallelStream()
+                        .max(Comparator.comparingDouble(Mqtt::getTemperature));
+//            System.out.println(maxTemperatureObject);
+                OffsetDateTime maxOffsetDateTime = maxTemperatureObject.map(Mqtt::getCollecttime).orElse(null);
+
+//            System.out.println("最大值对应的时间" + maxOffsetDateTime);
+
+                double minTemperature = collect.stream()
+                        .mapToDouble(Mqtt::getTemperature)
+                        .min().orElse(0);
+
+                Optional<Mqtt> minTemperatureObject = collect.parallelStream()
+                        .min(Comparator.comparingDouble(Mqtt::getTemperature));
+//            System.out.println(minTemperatureObject);
+                OffsetDateTime minOffsetDateTime = minTemperatureObject.map(Mqtt::getCollecttime).orElse(null);
+//            System.out.println("最小值对应的时间" + minOffsetDateTime);
+                maxMqtt.setTemperature(Float.parseFloat(String.valueOf(maxTemperature)));
+                minMqtt.setTemperature(Float.parseFloat(String.valueOf(minTemperature)));
+//            固定的早晚时间
+                OffsetDateTime lastCollectTime = collect.get(0).getCollecttime();
+                OffsetDateTime firstCollectTime = collect.get(2).getCollecttime();
+
+                maxMqtt.setPointlabel(Long.parseLong(String.valueOf(i)));
+                minMqtt.setPointlabel(Long.parseLong(String.valueOf(i)));
+
+                //判断哪个数值在前面
+                if (maxOffsetDateTime.compareTo(minOffsetDateTime) > 0) {
+                    maxMqtt.setCollecttime(lastCollectTime);
+                    maxMqtt.setNum(collect.get(0).getNum());
+
+                    minMqtt.setCollecttime(firstCollectTime);
+                    minMqtt.setNum(collect.get(2).getNum());
+//                System.out.println("maxOffsetDateTime更大");
+                    list.add(minMqtt);
+                    list.add(maxMqtt);
+                } else {
+                    maxMqtt.setCollecttime(firstCollectTime);
+                    maxMqtt.setNum(collect.get(2).getNum());
+
+                    minMqtt.setCollecttime(lastCollectTime);
+                    minMqtt.setNum(collect.get(0).getNum());
+
+//                System.out.println("minOffsetDateTime更大");
+                    list.add(maxMqtt);
+                    list.add(minMqtt);
+                }
+
+
+//            System.out.println("Temperature最大值：" + maxTemperature);
+//            System.out.println("Temperature最小值：" + minTemperature);
+//            System.out.println("Collecttime中间时间：" + firstCollectTime);
+//            System.out.println("Collecttime最后时间：" + lastCollectTime);
+//            System.out.println("当前label为" + i);
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        stopWatch.stop();
+        log.info(stopWatch.getTotalTimeSeconds() + "处理时间");
+        stopWatch.start();
+        boolean insert = mqttMapper.insertTableMeasureData(schemaName, "measuredata" + value, list);
+        stopWatch.stop();
+        log.info(stopWatch.getTotalTimeSeconds() + "插入时间");
+        if (insert) {
+            System.out.println("压缩" + value + "成功");
+        } else {
+            System.out.println("压缩" + value + "失败");
+        }
+        return insert;
+    }
+
+    /**
+     * label测点数量
+     * value查询8-128的数量及对应的measuredata8-128
+     * schemaName模式名称
+     */
+    @Transactional
+    @Override
+    public boolean insertTableMeasureDataOther(String schemaName, int value, int label) {
+        StopWatch stopWatch = new StopWatch();
+//        stopWatch.start();
+        List<Mqtt> mqttList = mqttMapper.selectMeasureData(schemaName, value / 2);
+//        stopWatch.stop();
+//        log.info(stopWatch.getTotalTimeSeconds() + "查询时间");
+//        i为点数数量
+        List<Mqtt> list = new LinkedList<>();
         stopWatch.start();
         for (int i = 1; i <= label; i++) {
             Mqtt maxMqtt = new Mqtt();
@@ -98,7 +197,7 @@ public class MqttServiceImpl extends ServiceImpl<MqttMapper, Mqtt> implements Mq
             minMqtt.setTemperature(Float.parseFloat(String.valueOf(minTemperature)));
 //            固定的早晚时间
             OffsetDateTime lastCollectTime = collect.get(0).getCollecttime();
-            OffsetDateTime firstCollectTime = collect.get(value / 2).getCollecttime();
+            OffsetDateTime firstCollectTime = collect.get(2).getCollecttime();
 
             maxMqtt.setPointlabel(Long.parseLong(String.valueOf(i)));
             minMqtt.setPointlabel(Long.parseLong(String.valueOf(i)));
@@ -106,13 +205,20 @@ public class MqttServiceImpl extends ServiceImpl<MqttMapper, Mqtt> implements Mq
             //判断哪个数值在前面
             if (maxOffsetDateTime.compareTo(minOffsetDateTime) > 0) {
                 maxMqtt.setCollecttime(lastCollectTime);
+                maxMqtt.setNum(collect.get(0).getNum());
+
                 minMqtt.setCollecttime(firstCollectTime);
+                minMqtt.setNum(collect.get(2).getNum());
 //                System.out.println("maxOffsetDateTime更大");
                 list.add(minMqtt);
                 list.add(maxMqtt);
             } else {
                 maxMqtt.setCollecttime(firstCollectTime);
+                maxMqtt.setNum(collect.get(2).getNum());
+
                 minMqtt.setCollecttime(lastCollectTime);
+                minMqtt.setNum(collect.get(0).getNum());
+
 //                System.out.println("minOffsetDateTime更大");
                 list.add(maxMqtt);
                 list.add(minMqtt);
@@ -126,11 +232,11 @@ public class MqttServiceImpl extends ServiceImpl<MqttMapper, Mqtt> implements Mq
 //            System.out.println("当前label为" + i);
         }
         stopWatch.stop();
-        log.info(stopWatch.getTotalTimeSeconds() + "数据库插入时间");
+        log.info(stopWatch.getTotalTimeSeconds() + "处理时间");
         stopWatch.start();
         boolean insert = mqttMapper.insertTableMeasureData(schemaName, "measuredata" + value, list);
         stopWatch.stop();
-        log.info(stopWatch.getTotalTimeSeconds() + "list插入时间");
+        log.info(stopWatch.getTotalTimeSeconds() + "插入时间");
         if (insert) {
             System.out.println("压缩" + value + "成功");
         } else {

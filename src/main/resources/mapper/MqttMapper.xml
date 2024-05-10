@@ -31,10 +31,10 @@
     </insert>
     <!--    动态插入测量4-128压缩数据-->
     <insert id="insertTableMeasureData">
-        insert into ${schemaName}.${tableName} (temperature,pointlabel,collecttime)
+        insert into ${schemaName}.${tableName} (temperature,pointlabel,collecttime,num)
         values
         <foreach collection="mqttList" item="item" index="index" separator=",">
-            (#{item.temperature}, #{item.pointlabel}, #{item.collecttime})
+            (#{item.temperature}, #{item.pointlabel}, #{item.collecttime},#{item.num})
         </foreach>
     </insert>
 <!--    <select id="select">-->
@@ -57,7 +57,8 @@
         (
             "temperature" float4,
             "pointlabel"  int8,
-            "collecttime" timestamptz NOT NULL
+            "collecttime" timestamptz NOT NULL,
+            "num"         int8
         );
     </update>
     <update id="createMeasureInfoTable">
@@ -624,7 +625,6 @@
         );
     </update>
     <select id="selectMeasureOrigin" resultType="com.guo.mqtttimescaledb.eneity.Mqtt">
-
         with last_num as (select last(num,collecttime) as num from ${schemaName}.measureorigindata)
         select * from ${schemaName}.measureorigindata
         where num BETWEEN(select num - ${value} + 1 from last_num) and (select num from last_num) ORDER BY pointlabel,collecttime DESC;
@@ -638,9 +638,15 @@
     </select>
     <select id="selectMeasureData" resultType="com.guo.mqtttimescaledb.eneity.Mqtt">
 
-        with last_num as (select last(num,collecttime) as num from ${schemaName}.measuredata4)
-        select * from ${schemaName}.measuredata4
-        where num BETWEEN(select num - ${value} + 1 from last_num) and (select num from last_num) ORDER BY pointlabel,collecttime DESC;
+        with last_num as (select last(num,collecttime) as num from ${schemaName}.measuredata${value})
+        select * from ${schemaName}.measuredata${value}
+        where num BETWEEN(select num - ${value}*2 + 1 from last_num) and (select num from last_num) ORDER BY pointlabel,collecttime DESC;
 
+--         SELECT *
+--                 FROM (
+--                  SELECT *, ROW_NUMBER() OVER (PARTITION BY pointlabel ORDER BY collecttime DESC) as rn
+--                  FROM ${schemaName}.measuredata${value}
+--              ) AS ranked
+--         WHERE rn &lt;= 4;
     </select>
 </mapper>
