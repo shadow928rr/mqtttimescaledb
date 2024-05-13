@@ -27,7 +27,7 @@ public class Controlcache implements Serializable {
     /**
      *
      */
-    @TableId
+    @TableField
     private String groupname;
 
     /**
